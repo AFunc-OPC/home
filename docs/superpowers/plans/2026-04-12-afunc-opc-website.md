@@ -552,7 +552,7 @@ Expected: File has approximately 220 lines
   
   <!-- Main Content -->
   <main id="main-content" role="main">
-    <!-- Sections will be added in Chunk 2 & 3 -->
+    <!-- Sections will be added in Chunk 3 -->
   </main>
   
   <!-- Footer -->
@@ -975,23 +975,834 @@ Expected: File has approximately 260 lines
 
 - [ ] **Step 1: Create css/components.css with all component styles**
 
-See separate file for component CSS (file is large, approximately 580 lines).
+```css
+/* ========== Navigation ========== */
 
-Key components to include:
-- Navigation (.navbar, .navbar__menu, .navbar__link, etc.)
-- Mobile Menu (.mobile-menu)
-- Buttons (.btn, .btn--primary, .btn--secondary, .btn--ghost)
-- Project Card (.project-card)
-- Tags (.tag, .filter-tag)
-- Search Box (.search-box)
-- Article Card (.article-card)
-- Stat Card (.stat-card)
-- Team Card (.team-card)
-- Chart Card (.chart-card)
-- Modal (.modal-overlay, .modal)
-- Empty State (.empty-state)
-- Project Detail (.project-detail)
-- Back to Top Button (.back-to-top)
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--z-fixed);
+  height: var(--navbar-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--space-lg);
+  background: transparent;
+  transition: background var(--duration-normal) var(--ease-smooth),
+              backdrop-filter var(--duration-normal) var(--ease-smooth);
+}
+
+.navbar--scrolled {
+  background: rgba(15, 15, 35, 0.85);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.navbar__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.navbar__logo {
+  font-size: var(--text-2xl);
+}
+
+.navbar__title {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: var(--font-bold);
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.navbar__menu {
+  display: none;
+  align-items: center;
+  gap: var(--space-xl);
+  list-style: none;
+}
+
+@media (min-width: 1025px) {
+  .navbar__menu {
+    display: flex;
+  }
+}
+
+.navbar__link {
+  font-size: var(--text-base);
+  font-weight: var(--font-medium);
+  color: var(--color-text-secondary);
+  transition: color var(--duration-fast) var(--ease-smooth);
+  position: relative;
+}
+
+.navbar__link::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--gradient-primary);
+  transition: width var(--duration-fast) var(--ease-smooth);
+}
+
+.navbar__link:hover,
+.navbar__link--active {
+  color: var(--color-text-primary);
+}
+
+.navbar__link:hover::after,
+.navbar__link--active::after {
+  width: 100%;
+}
+
+.navbar__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.navbar__search {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-secondary);
+  border-radius: var(--radius-md);
+  transition: background var(--duration-fast) var(--ease-smooth),
+              color var(--duration-fast) var(--ease-smooth);
+}
+
+.navbar__search:hover {
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+}
+
+.navbar__hamburger {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 40px;
+  height: 40px;
+  padding: 8px;
+  border-radius: var(--radius-md);
+  transition: background var(--duration-fast) var(--ease-smooth);
+}
+
+.navbar__hamburger:hover {
+  background: var(--color-surface);
+}
+
+.navbar__hamburger span {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: var(--color-text-primary);
+  border-radius: 2px;
+  transition: transform var(--duration-fast) var(--ease-smooth),
+              opacity var(--duration-fast) var(--ease-smooth);
+}
+
+.navbar__hamburger--active span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.navbar__hamburger--active span:nth-child(2) {
+  opacity: 0;
+}
+
+.navbar__hamburger--active span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+@media (min-width: 1025px) {
+  .navbar__hamburger {
+    display: none;
+  }
+}
+
+/* ========== Mobile Menu ========== */
+
+.mobile-menu {
+  position: fixed;
+  top: var(--navbar-height);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: var(--z-modal-backdrop);
+  background: rgba(15, 15, 35, 0.95);
+  backdrop-filter: blur(20px);
+  padding: var(--space-xl);
+  transform: translateX(100%);
+  transition: transform var(--duration-normal) var(--ease-smooth);
+}
+
+.mobile-menu--active {
+  transform: translateX(0);
+}
+
+.mobile-menu__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  list-style: none;
+}
+
+.mobile-menu__link {
+  display: block;
+  font-size: var(--text-xl);
+  font-weight: var(--font-medium);
+  color: var(--color-text-secondary);
+  padding: var(--space-md);
+  border-radius: var(--radius-lg);
+  transition: background var(--duration-fast) var(--ease-smooth),
+              color var(--duration-fast) var(--ease-smooth);
+}
+
+.mobile-menu__link:hover,
+.mobile-menu__link--active {
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+}
+
+/* ========== Buttons ========== */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  font-weight: var(--font-medium);
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: var(--radius-lg);
+  transition: all var(--duration-fast) var(--ease-smooth);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn--primary {
+  background: var(--gradient-primary);
+  color: var(--color-text-primary);
+  border: none;
+}
+
+.btn--primary:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-glow);
+}
+
+.btn--primary:active {
+  transform: translateY(0);
+}
+
+.btn--secondary {
+  background: var(--glass-background);
+  color: var(--color-text-primary);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: var(--glass-blur);
+}
+
+.btn--secondary:hover {
+  background: var(--glass-background-hover);
+  transform: translateY(-2px);
+}
+
+.btn--ghost {
+  background: transparent;
+  color: var(--color-text-secondary);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.btn--ghost:hover {
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+  border-color: var(--glass-border);
+}
+
+.btn--large {
+  padding: var(--space-md) var(--space-xl);
+  font-size: var(--text-lg);
+}
+
+.btn--disabled,
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ========== Project Card ========== */
+
+.project-card {
+  background: var(--glass-background);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-lg);
+  backdrop-filter: var(--glass-blur);
+  transition: transform var(--duration-normal) var(--ease-smooth),
+              box-shadow var(--duration-normal) var(--ease-smooth);
+  cursor: pointer;
+}
+
+.project-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-glow);
+}
+
+.project-card--featured {
+  grid-row: span 2;
+}
+
+.project-card__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  margin-bottom: var(--space-md);
+}
+
+.project-card__icon {
+  font-size: var(--text-3xl);
+}
+
+.project-card__title {
+  font-size: var(--text-xl);
+  font-weight: var(--font-semibold);
+  color: var(--color-text-primary);
+}
+
+.project-card__description {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-md);
+  line-height: var(--leading-relaxed);
+}
+
+.project-card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-md);
+}
+
+.project-card__stats {
+  display: flex;
+  gap: var(--space-lg);
+  margin-bottom: var(--space-md);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.project-card__actions {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.project-card__status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: var(--text-xs);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-full);
+  background: var(--color-surface);
+}
+
+.project-card__status--active {
+  color: var(--color-success);
+}
+
+.project-card__status--archived {
+  color: var(--color-warning);
+}
+
+.project-card__status--developing {
+  color: var(--color-info);
+}
+
+/* ========== Tags ========== */
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  font-size: var(--text-xs);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-full);
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
+  transition: background var(--duration-fast) var(--ease-smooth);
+}
+
+.tag:hover {
+  background: var(--color-surface-hover);
+  color: var(--color-text-primary);
+}
+
+.filter-tag {
+  display: inline-flex;
+  align-items: center;
+  font-size: var(--text-sm);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-full);
+  background: transparent;
+  border: 1px solid var(--glass-border);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-smooth);
+}
+
+.filter-tag:hover {
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+}
+
+.filter-tag--active {
+  background: var(--gradient-primary);
+  border-color: transparent;
+  color: var(--color-text-primary);
+}
+
+/* ========== Search Box ========== */
+
+.search-box {
+  position: relative;
+  width: 100%;
+  max-width: 300px;
+}
+
+.search-box__input {
+  width: 100%;
+  padding: var(--space-sm) var(--space-md);
+  padding-right: var(--space-2xl);
+  background: var(--glass-background);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  color: var(--color-text-primary);
+  font-size: var(--text-base);
+  backdrop-filter: var(--glass-blur);
+  transition: border-color var(--duration-fast) var(--ease-smooth);
+}
+
+.search-box__input:focus {
+  border-color: var(--color-accent-blue);
+}
+
+.search-box__clear {
+  position: absolute;
+  right: var(--space-sm);
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-muted);
+  border-radius: var(--radius-full);
+  transition: color var(--duration-fast) var(--ease-smooth);
+  opacity: 0;
+  visibility: hidden;
+}
+
+.search-box__clear:hover {
+  color: var(--color-text-primary);
+}
+
+.search-box__clear--visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ========== Article Card ========== */
+
+.article-card {
+  background: var(--glass-background);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  backdrop-filter: var(--glass-blur);
+  transition: transform var(--duration-normal) var(--ease-smooth),
+              box-shadow var(--duration-normal) var(--ease-smooth);
+}
+
+.article-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-glow);
+}
+
+.article-card__image {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+}
+
+.article-card__content {
+  padding: var(--space-lg);
+}
+
+.article-card__category {
+  display: inline-block;
+  font-size: var(--text-xs);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-sm);
+  background: var(--gradient-primary);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-sm);
+}
+
+.article-card__title {
+  font-size: var(--text-lg);
+  font-weight: var(--font-semibold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-sm);
+}
+
+.article-card__excerpt {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-md);
+  line-height: var(--leading-relaxed);
+}
+
+.article-card__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+.article-card__author {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.article-card__author-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+}
+
+/* ========== Stat Card ========== */
+
+.stat-card {
+  background: var(--glass-background);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-lg);
+  text-align: center;
+  backdrop-filter: var(--glass-blur);
+}
+
+.stat-card--large {
+  grid-column: span 2;
+}
+
+@media (max-width: 767px) {
+  .stat-card--large {
+    grid-column: span 1;
+  }
+}
+
+.stat-card__icon {
+  font-size: var(--text-3xl);
+  margin-bottom: var(--space-sm);
+}
+
+.stat-card__number {
+  font-size: var(--text-3xl);
+  font-weight: var(--font-bold);
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: var(--space-xs);
+}
+
+.stat-card__label {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+/* ========== Team Card ========== */
+
+.team-card {
+  background: var(--glass-background);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md);
+  text-align: center;
+  backdrop-filter: var(--glass-blur);
+  transition: transform var(--duration-normal) var(--ease-smooth);
+}
+
+.team-card:hover {
+  transform: translateY(-2px);
+}
+
+.team-card__avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-full);
+  margin: 0 auto var(--space-sm);
+  background: var(--gradient-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-2xl);
+}
+
+.team-card__name {
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-xs);
+}
+
+.team-card__role {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+/* ========== Chart Card ========== */
+
+.chart-card {
+  background: var(--glass-background);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-lg);
+  backdrop-filter: var(--glass-blur);
+}
+
+.chart-card__title {
+  font-size: var(--text-lg);
+  font-weight: var(--font-semibold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-lg);
+}
+
+.chart-card__body {
+  min-height: 200px;
+}
+
+/* ========== Modal ========== */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: var(--z-modal-backdrop);
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-lg);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--duration-normal) var(--ease-smooth),
+              visibility var(--duration-normal) var(--ease-smooth);
+}
+
+.modal-overlay--active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal {
+  position: relative;
+  width: 100%;
+  max-width: 800px;
+  max-height: 90vh;
+  background: var(--color-background);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-2xl);
+  overflow: hidden;
+  transform: scale(0.95);
+  transition: transform var(--duration-normal) var(--ease-smooth);
+}
+
+.modal-overlay--active .modal {
+  transform: scale(1);
+}
+
+.modal__close {
+  position: absolute;
+  top: var(--space-md);
+  right: var(--space-md);
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-2xl);
+  color: var(--color-text-muted);
+  border-radius: var(--radius-full);
+  background: var(--color-surface);
+  transition: background var(--duration-fast) var(--ease-smooth),
+              color var(--duration-fast) var(--ease-smooth);
+  z-index: 1;
+}
+
+.modal__close:hover {
+  background: var(--color-surface-hover);
+  color: var(--color-text-primary);
+}
+
+.modal__content {
+  padding: var(--space-xl);
+  overflow-y: auto;
+  max-height: 90vh;
+}
+
+/* ========== Empty State ========== */
+
+.empty-state {
+  text-align: center;
+  padding: var(--space-3xl);
+}
+
+.empty-state__icon {
+  font-size: 4rem;
+  margin-bottom: var(--space-lg);
+  opacity: 0.5;
+}
+
+.empty-state__title {
+  font-size: var(--text-xl);
+  font-weight: var(--font-semibold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-sm);
+}
+
+.empty-state__text {
+  font-size: var(--text-base);
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-lg);
+}
+
+/* ========== Project Detail ========== */
+
+.project-detail__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.project-detail__icon {
+  font-size: var(--text-4xl);
+}
+
+.project-detail__title {
+  font-size: var(--text-2xl);
+  font-weight: var(--font-bold);
+  color: var(--color-text-primary);
+}
+
+.project-detail__stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.project-detail__description {
+  color: var(--color-text-secondary);
+  line-height: var(--leading-relaxed);
+  margin-bottom: var(--space-lg);
+}
+
+.project-detail__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-lg);
+}
+
+.project-detail__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+}
+
+.project-detail__image {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-top: var(--space-lg);
+}
+
+.project-detail__image img {
+  width: 100%;
+  height: auto;
+}
+
+/* ========== Back to Top Button ========== */
+
+.back-to-top {
+  position: fixed;
+  bottom: var(--space-xl);
+  right: var(--space-xl);
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--gradient-primary);
+  color: var(--color-text-primary);
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-lg);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px);
+  transition: opacity var(--duration-normal) var(--ease-smooth),
+              visibility var(--duration-normal) var(--ease-smooth),
+              transform var(--duration-normal) var(--ease-smooth);
+  z-index: var(--z-sticky);
+}
+
+.back-to-top--visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.back-to-top:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-glow);
+}
+
+/* ========== Filter Bar ========== */
+
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+/* ========== Load More Button ========== */
+
+.load-more {
+  display: block;
+  margin: var(--space-xl) auto 0;
+}
+```
 
 - [ ] **Step 2: Verify components.css creation**
 
@@ -1210,17 +2021,293 @@ Expected: Commit created successfully
 
 - [ ] **Step 1: Create js/data.js with all data structures**
 
-Data structures to include:
-- `projects` array with 6 sample projects
-- `articles` array with 4 sample articles
-- `team` array with 4 team members
-- `stats` object with aggregate statistics
-- `filterTags` array for project filtering
-- `categories` array for article filtering
+```javascript
+const projects = [
+  {
+    id: "project-001",
+    name: "AFunc Core",
+    description: "核心函数库，提供高性能的工具函数和实用工具集",
+    longDescription: "AFunc Core 是一个现代化的 JavaScript 工具函数库，提供了 100+ 个高性能、经过充分测试的工具函数。支持 Tree-shaking，零依赖，TypeScript 类型完整，适用于浏览器和 Node.js 环境。",
+    icon: "⚡",
+    tags: ["javascript", "typescript", "utils"],
+    stars: 1234,
+    forks: 256,
+    status: "active",
+    links: {
+      github: "https://github.com/afunc-opc/afunc-core",
+      demo: "https://afunc-core-demo.netlify.app",
+      docs: "https://afunc-core-docs.netlify.app"
+    },
+    image: "https://via.placeholder.com/800x400/667eea/ffffff?text=AFunc+Core",
+    featured: true,
+    createdAt: "2024-01-15",
+    updatedAt: "2026-04-10"
+  },
+  {
+    id: "project-002",
+    name: "Vibe UI",
+    description: "现代化的 React 组件库，专注于开发者体验和可访问性",
+    longDescription: "Vibe UI 是一个从头设计的 React 组件库，专注于提供最佳的开发者体验和用户可访问性。包含 50+ 组件，支持暗色主题，完全可定制，遵循 WAI-ARIA 规范。",
+    icon: "🎨",
+    tags: ["react", "typescript", "ui"],
+    stars: 892,
+    forks: 134,
+    status: "active",
+    links: {
+      github: "https://github.com/afunc-opc/vibe-ui",
+      demo: "https://vibe-ui-demo.vercel.app",
+      docs: "https://vibe-ui-docs.vercel.app"
+    },
+    image: "https://via.placeholder.com/800x400/764ba2/ffffff?text=Vibe+UI",
+    featured: true,
+    createdAt: "2024-03-20",
+    updatedAt: "2026-04-08"
+  },
+  {
+    id: "project-003",
+    name: "CodeFlow",
+    description: "可视化代码编辑器，支持实时协作和 AI 辅助编程",
+    longDescription: "CodeFlow 是一个创新的在线代码编辑器，支持多人实时协作、AI 代码补全和智能重构建议。基于 Monaco Editor 构建，提供类似 VS Code 的编辑体验。",
+    icon: "💻",
+    tags: ["javascript", "web", "editor"],
+    stars: 2341,
+    forks: 456,
+    status: "active",
+    links: {
+      github: "https://github.com/afunc-opc/codeflow",
+      demo: "https://codeflow.app",
+      docs: "https://docs.codeflow.app"
+    },
+    image: "https://via.placeholder.com/800x400/f093fb/ffffff?text=CodeFlow",
+    featured: false,
+    createdAt: "2024-05-10",
+    updatedAt: "2026-04-11"
+  },
+  {
+    id: "project-004",
+    name: "DataViz Pro",
+    description: "交互式数据可视化库，支持 20+ 图表类型",
+    longDescription: "DataViz Pro 是一个强大的数据可视化库，基于 D3.js 构建，提供 20+ 种交互式图表。支持大数据量渲染，响应式设计，完整的 TypeScript 类型支持。",
+    icon: "📊",
+    tags: ["javascript", "d3", "visualization"],
+    stars: 567,
+    forks: 89,
+    status: "active",
+    links: {
+      github: "https://github.com/afunc-opc/dataviz-pro",
+      demo: "https://dataviz-pro-demo.netlify.app",
+      docs: "https://dataviz-pro-docs.netlify.app"
+    },
+    image: "https://via.placeholder.com/800x400/00d4ff/ffffff?text=DataViz+Pro",
+    featured: false,
+    createdAt: "2024-07-01",
+    updatedAt: "2026-03-28"
+  },
+  {
+    id: "project-005",
+    name: "APIForge",
+    description: "API 开发和测试工具，支持 Mock 服务器和文档生成",
+    longDescription: "APIForge 是一个全面的 API 开发工具，支持 API 设计、Mock 服务器、自动化测试和文档生成。与 OpenAPI 规范完全兼容，提供直观的可视化界面。",
+    icon: "🔌",
+    tags: ["nodejs", "api", "tools"],
+    stars: 423,
+    forks: 67,
+    status: "developing",
+    links: {
+      github: "https://github.com/afunc-opc/apiforge",
+      demo: null,
+      docs: "https://apiforge-docs.netlify.app"
+    },
+    image: "https://via.placeholder.com/800x400/4ade80/ffffff?text=APIForge",
+    featured: false,
+    createdAt: "2025-09-15",
+    updatedAt: "2026-04-05"
+  },
+  {
+    id: "project-006",
+    name: "DevBoard",
+    description: "开发者个人仪表板，集成 GitHub、Notion 等服务",
+    longDescription: "DevBoard 是一个可定制的开发者个人仪表板，集成 GitHub、Notion、Calendar 等常用服务。支持小部件系统，可以自由拖拽和配置布局。",
+    icon: "🎯",
+    tags: ["react", "dashboard", "integration"],
+    stars: 312,
+    forks: 45,
+    status: "archived",
+    links: {
+      github: "https://github.com/afunc-opc/devboard",
+      demo: "https://devboard-demo.vercel.app",
+      docs: null
+    },
+    image: "https://via.placeholder.com/800x400/fbbf24/ffffff?text=DevBoard",
+    featured: false,
+    createdAt: "2024-11-20",
+    updatedAt: "2025-06-15"
+  }
+];
 
-Each project should have: id, name, description, longDescription, icon, tags, stars, forks, status, links, image, featured, createdAt, updatedAt
+const articles = [
+  {
+    id: "article-001",
+    title: "构建高性能 JavaScript 工具库的最佳实践",
+    excerpt: "深入探讨如何设计和实现一个高性能、可维护的 JavaScript 工具库，包括 Tree-shaking 优化、类型设计和性能测试策略。",
+    content: "在构建 JavaScript 工具库时，性能和可维护性是两个核心目标...",
+    author: "Alex Chen",
+    authorAvatar: "https://via.placeholder.com/48/667eea/ffffff?text=A",
+    category: "tutorial",
+    tags: ["javascript", "performance", "best-practices"],
+    coverImage: "https://via.placeholder.com/400x225/667eea/ffffff?text=Tutorial",
+    publishedAt: "2026-04-05",
+    readTime: 8
+  },
+  {
+    id: "article-002",
+    title: "React 组件设计模式深度解析",
+    excerpt: "探索 10 种常用的 React 组件设计模式，包括 Compound Components、Render Props、Hooks 等模式的实现和应用场景。",
+    content: "React 组件设计模式是构建可复用、可维护 UI 的关键...",
+    author: "Sarah Wang",
+    authorAvatar: "https://via.placeholder.com/48/764ba2/ffffff?text=S",
+    category: "insight",
+    tags: ["react", "patterns", "architecture"],
+    coverImage: "https://via.placeholder.com/400x225/764ba2/ffffff?text=Insight",
+    publishedAt: "2026-03-28",
+    readTime: 12
+  },
+  {
+    id: "article-003",
+    title: "TypeScript 5.0 新特性完全指南",
+    excerpt: "全面介绍 TypeScript 5.0 带来的新特性，包括新的模块解析策略、装饰器改进和性能优化。",
+    content: "TypeScript 5.0 带来了许多令人兴奋的新特性...",
+    author: "Mike Liu",
+    authorAvatar: "https://via.placeholder.com/48/f093fb/ffffff?text=M",
+    category: "tutorial",
+    tags: ["typescript", "release", "guide"],
+    coverImage: "https://via.placeholder.com/400x225/f093fb/ffffff?text=Tutorial",
+    publishedAt: "2026-03-15",
+    readTime: 10
+  },
+  {
+    id: "article-004",
+    title: "从零构建实时协作编辑器",
+    excerpt: "详细讲解如何基于 CRDT 算法实现一个支持多人实时协作的代码编辑器，包括冲突解决和状态同步。",
+    content: "实时协作是现代应用的重要特性...",
+    author: "Emily Zhang",
+    authorAvatar: "https://via.placeholder.com/48/00d4ff/ffffff?text=E",
+    category: "insight",
+    tags: ["collaboration", "crdt", "architecture"],
+    coverImage: "https://via.placeholder.com/400x225/00d4ff/ffffff?text=Insight",
+    publishedAt: "2026-02-20",
+    readTime: 15
+  }
+];
 
-Each article should have: id, title, excerpt, content, author, authorAvatar, category, tags, coverImage, publishedAt, readTime
+const team = [
+  {
+    name: "Alex Chen",
+    role: "创始人 & 核心开发者",
+    avatar: "👨‍💻",
+    bio: "10年全栈开发经验，专注于 JavaScript 生态系统和开发者工具。",
+    links: {
+      github: "https://github.com/alexchen",
+      twitter: "https://twitter.com/alexchen",
+      email: "alex@afunc-opc.com"
+    }
+  },
+  {
+    name: "Sarah Wang",
+    role: "UI/UX 设计师",
+    avatar: "👩‍🎨",
+    bio: "专注于开发者体验和可访问性设计，推动组件库的设计方向。",
+    links: {
+      github: "https://github.com/sarahwang",
+      twitter: "https://twitter.com/sarahwang",
+      email: "sarah@afunc-opc.com"
+    }
+  },
+  {
+    name: "Mike Liu",
+    role: "后端架构师",
+    avatar: "👨‍🔬",
+    bio: "云原生和微服务架构专家，负责 API 平台和基础设施设计。",
+    links: {
+      github: "https://github.com/mikeliu",
+      twitter: null,
+      email: "mike@afunc-opc.com"
+    }
+  },
+  {
+    name: "Emily Zhang",
+    role: "全栈开发者",
+    avatar: "👩‍💻",
+    bio: "专注于实时系统和协作工具开发，CodeFlow 项目核心贡献者。",
+    links: {
+      github: "https://github.com/emilyzhang",
+      twitter: "https://twitter.com/emilyzhang",
+      email: "emily@afunc-opc.com"
+    }
+  }
+];
+
+const stats = {
+  totalProjects: 20,
+  totalStars: 15234,
+  totalForks: 3456,
+  techStackCount: 15,
+  activeContributors: 8,
+  lastUpdate: "2026-04-12",
+  techDistribution: [
+    { name: "JavaScript", count: 12, percentage: 60 },
+    { name: "TypeScript", count: 10, percentage: 50 },
+    { name: "React", count: 8, percentage: 40 },
+    { name: "Node.js", count: 6, percentage: 30 },
+    { name: "Python", count: 3, percentage: 15 },
+    { name: "Rust", count: 2, percentage: 10 }
+  ],
+  recentUpdates: [
+    {
+      projectName: "AFunc Core",
+      type: "release",
+      message: "v2.5.0 - 新增 20 个工具函数",
+      date: "2026-04-10"
+    },
+    {
+      projectName: "Vibe UI",
+      type: "commit",
+      message: "优化组件性能，减少 30% 包大小",
+      date: "2026-04-08"
+    },
+    {
+      projectName: "CodeFlow",
+      type: "release",
+      message: "v1.2.0 - 新增 AI 代码补全功能",
+      date: "2026-04-11"
+    },
+    {
+      projectName: "DataViz Pro",
+      type: "commit",
+      message: "添加热力图和雷达图支持",
+      date: "2026-03-28"
+    }
+  ]
+};
+
+const filterTags = [
+  { id: "all", label: "全部" },
+  { id: "javascript", label: "JavaScript" },
+  { id: "typescript", label: "TypeScript" },
+  { id: "react", label: "React" },
+  { id: "nodejs", label: "Node.js" },
+  { id: "ui", label: "UI" },
+  { id: "api", label: "API" },
+  { id: "tools", label: "Tools" },
+  { id: "visualization", label: "Visualization" }
+];
+
+const categories = [
+  { id: "all", label: "全部" },
+  { id: "tutorial", label: "教程" },
+  { id: "insight", label: "洞察" }
+];
+```
 
 - [ ] **Step 2: Verify data.js creation**
 
@@ -1240,25 +2327,249 @@ Expected: File has approximately 280 lines
 
 - [ ] **Step 1: Create js/utils.js with utility functions**
 
-Utility functions to include:
-- `debounce(func, wait)` - Debounce function
-- `throttle(func, limit)` - Throttle function
-- `formatNumber(num)` - Format numbers with K/M suffix
-- `formatDate(dateString)` - Format dates to relative time
-- `getStatusLabel(status)` - Get localized status label
-- `getCategoryLabel(category)` - Get localized category label
-- `$(selector)` - Query selector shorthand
-- `$$(selector)` - Query selector all shorthand
-- `createElement(tag, className, innerHTML)` - Create DOM element
-- `renderProjectCard(project)` - Render project card HTML
-- `renderArticleCard(article)` - Render article card HTML
-- `renderTeamCard(member)` - Render team card HTML
-- `renderStatCard(stat, icon, label, isLarge)` - Render stat card HTML
-- `renderFilterTags(tags, activeTag)` - Render filter tags HTML
-- `renderProjectDetail(project)` - Render project detail modal HTML
-- `renderEmptyState()` - Render empty state HTML
-- `renderTechDistribution(techDistribution)` - Render tech chart HTML
-- `renderRecentUpdates(updates)` - Render updates list HTML
+```javascript
+function debounce(func, wait) {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+}
+
+function throttle(func, limit) {
+  let inThrottle;
+  return function(...args) {
+    if (!inThrottle) {
+      func.apply(this, args);
+      inThrottle = true;
+      setTimeout(() => inThrottle = false, limit);
+    }
+  };
+}
+
+function formatNumber(num) {
+  if (num >= 1000000) {
+    return (num / 1000000).toFixed(1) + 'M';
+  }
+  if (num >= 1000) {
+    return (num / 1000).toFixed(1) + 'K';
+  }
+  return num.toString();
+}
+
+function formatDate(dateString) {
+  const date = new Date(dateString);
+  const now = new Date();
+  const diffTime = Math.abs(now - date);
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  
+  if (diffDays < 7) {
+    return `${diffDays} 天前`;
+  } else if (diffDays < 30) {
+    return `${Math.floor(diffDays / 7)} 周前`;
+  } else if (diffDays < 365) {
+    return `${Math.floor(diffDays / 30)} 个月前`;
+  } else {
+    return `${Math.floor(diffDays / 365)} 年前`;
+  }
+}
+
+function getStatusLabel(status) {
+  const labels = {
+    active: '活跃',
+    archived: '已归档',
+    developing: '开发中'
+  };
+  return labels[status] || status;
+}
+
+function getCategoryLabel(category) {
+  const labels = {
+    tutorial: '教程',
+    insight: '洞察'
+  };
+  return labels[category] || category;
+}
+
+function $(selector) {
+  return document.querySelector(selector);
+}
+
+function $$(selector) {
+  return document.querySelectorAll(selector);
+}
+
+function createElement(tag, className, innerHTML) {
+  const element = document.createElement(tag);
+  if (className) {
+    element.className = className;
+  }
+  if (innerHTML) {
+    element.innerHTML = innerHTML;
+  }
+  return element;
+}
+
+function renderProjectCard(project) {
+  const statusClass = `project-card__status--${project.status}`;
+  const featuredClass = project.featured ? 'project-card--featured' : '';
+  
+  return `
+    <article class="project-card ${featuredClass} fade-in-up" data-id="${project.id}">
+      <div class="project-card__header">
+        <span class="project-card__icon">${project.icon}</span>
+        <h3 class="project-card__title">${project.name}</h3>
+      </div>
+      <p class="project-card__description">${project.description}</p>
+      <div class="project-card__tags">
+        ${project.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+      </div>
+      <div class="project-card__stats">
+        <span>⭐ ${formatNumber(project.stars)}</span>
+        <span>🍴 ${formatNumber(project.forks)}</span>
+        <span class="project-card__status ${statusClass}">● ${getStatusLabel(project.status)}</span>
+      </div>
+    </article>
+  `;
+}
+
+function renderArticleCard(article) {
+  return `
+    <article class="article-card fade-in-up">
+      <img src="${article.coverImage}" alt="${article.title}" class="article-card__image" loading="lazy">
+      <div class="article-card__content">
+        <span class="article-card__category">${getCategoryLabel(article.category)}</span>
+        <h3 class="article-card__title">${article.title}</h3>
+        <p class="article-card__excerpt">${article.excerpt}</p>
+        <div class="article-card__meta">
+          <span class="article-card__author">
+            <span>${article.authorAvatar}</span>
+            ${article.author}
+          </span>
+          <span>${formatDate(article.publishedAt)}</span>
+          <span>${article.readTime} min read</span>
+        </div>
+      </div>
+    </article>
+  `;
+}
+
+function renderTeamCard(member) {
+  return `
+    <div class="team-card">
+      <div class="team-card__avatar">${member.avatar}</div>
+      <h4 class="team-card__name">${member.name}</h4>
+      <p class="team-card__role">${member.role}</p>
+    </div>
+  `;
+}
+
+function renderStatCard(stat, icon, label, isLarge = false) {
+  const largeClass = isLarge ? 'stat-card--large' : '';
+  return `
+    <div class="stat-card ${largeClass} fade-in-up">
+      <div class="stat-card__icon">${icon}</div>
+      <div class="stat-card__number">${formatNumber(stat)}</div>
+      <div class="stat-card__label">${label}</div>
+    </div>
+  `;
+}
+
+function renderFilterTags(tags, activeTag) {
+  return tags.map(tag => {
+    const activeClass = tag.id === activeTag ? 'filter-tag--active' : '';
+    const dataAttr = tag.id === 'all' ? 'data-tag="all"' : `data-tag="${tag.id}"`;
+    return `<button class="filter-tag ${activeClass}" ${dataAttr} aria-pressed="${tag.id === activeTag}">${tag.label}</button>`;
+  }).join('');
+}
+
+function renderProjectDetail(project) {
+  return `
+    <div class="project-detail">
+      <div class="project-detail__header">
+        <span class="project-detail__icon">${project.icon}</span>
+        <h2 class="project-detail__title">${project.name}</h2>
+      </div>
+      <div class="project-detail__stats">
+        <span>⭐ ${formatNumber(project.stars)} stars</span>
+        <span>🍴 ${formatNumber(project.forks)} forks</span>
+        <span>● ${getStatusLabel(project.status)}</span>
+      </div>
+      <p class="project-detail__description">${project.longDescription}</p>
+      <div class="project-detail__tags">
+        ${project.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+      </div>
+      <div class="project-detail__links">
+        <a href="${project.links.github}" class="btn btn--primary" target="_blank" rel="noopener">GitHub</a>
+        ${project.links.demo ? `<a href="${project.links.demo}" class="btn btn--secondary" target="_blank" rel="noopener">在线演示</a>` : ''}
+        ${project.links.docs ? `<a href="${project.links.docs}" class="btn btn--ghost" target="_blank" rel="noopener">文档</a>` : ''}
+      </div>
+      ${project.image ? `
+        <div class="project-detail__image">
+          <img src="${project.image}" alt="${project.name} 截图" loading="lazy">
+        </div>
+      ` : ''}
+    </div>
+  `;
+}
+
+function renderEmptyState() {
+  return `
+    <div class="empty-state">
+      <div class="empty-state__icon">🔍</div>
+      <h3 class="empty-state__title">没有找到相关项目</h3>
+      <p class="empty-state__text">尝试其他关键词或清除筛选条件</p>
+      <button class="btn btn--primary clear-filters">清除筛选</button>
+    </div>
+  `;
+}
+
+function renderTechDistribution(techDistribution) {
+  const maxCount = Math.max(...techDistribution.map(t => t.count));
+  return `
+    <div class="chart-card">
+      <h3 class="chart-card__title">技术栈分布</h3>
+      <div class="chart-card__body">
+        ${techDistribution.map(tech => `
+          <div style="margin-bottom: var(--space-sm);">
+            <div style="display: flex; justify-content: space-between; margin-bottom: var(--space-xs);">
+              <span style="color: var(--color-text-secondary); font-size: var(--text-sm);">${tech.name}</span>
+              <span style="color: var(--color-text-muted); font-size: var(--text-sm);">${tech.count} 项目</span>
+            </div>
+            <div style="height: 8px; background: var(--color-surface); border-radius: var(--radius-full); overflow: hidden;">
+              <div style="width: ${(tech.count / maxCount) * 100}%; height: 100%; background: var(--gradient-primary); border-radius: var(--radius-full);"></div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function renderRecentUpdates(updates) {
+  return `
+    <div class="chart-card">
+      <h3 class="chart-card__title">最近更新</h3>
+      <div class="chart-card__body">
+        ${updates.map(update => `
+          <div style="display: flex; align-items: flex-start; gap: var(--space-md); padding: var(--space-md) 0; border-bottom: 1px solid var(--glass-border);">
+            <span style="font-size: var(--text-lg);">${update.type === 'release' ? '🚀' : '📝'}</span>
+            <div style="flex: 1;">
+              <div style="font-weight: var(--font-medium); color: var(--color-text-primary); margin-bottom: var(--space-xs);">${update.projectName}</div>
+              <div style="font-size: var(--text-sm); color: var(--color-text-secondary);">${update.message}</div>
+              <div style="font-size: var(--text-xs); color: var(--color-text-muted); margin-top: var(--space-xs);">${formatDate(update.date)}</div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+```
 
 - [ ] **Step 2: Verify utils.js creation**
 
@@ -1278,71 +2589,470 @@ Expected: File has approximately 270 lines
 
 - [ ] **Step 1: Create js/app.js with main application logic**
 
-Application modules to include:
+```javascript
+const App = {
+  elements: {},
+  state: {
+    selectedTags: new Set(['all']),
+    searchQuery: '',
+    currentSection: 'hero',
+    isModalOpen: false,
+    isMobileMenuOpen: false
+  },
 
-1. **DOM Element References**
-   - Cache all DOM elements on page load
+  init() {
+    this.cacheElements();
+    this.initNavigation();
+    this.initMobileMenu();
+    this.initFilters();
+    this.initSearch();
+    this.initModals();
+    this.initScrollAnimations();
+    this.initBackToTop();
+    this.render();
+  },
 
-2. **State Management**
-   - selectedTags (Set)
-   - searchQuery (string)
-   - currentSection (string)
-   - isModalOpen (boolean)
-   - isMobileMenuOpen (boolean)
+  cacheElements() {
+    this.elements = {
+      navbar: $('.navbar'),
+      navbarLinks: $$('.navbar__link'),
+      hamburger: $('.navbar__hamburger'),
+      mobileMenu: $('.mobile-menu'),
+      mobileMenuLinks: $$('.mobile-menu__link'),
+      searchInput: $('.search-box__input'),
+      searchClear: $('.search-box__clear'),
+      filterBar: $('.filter-bar'),
+      projectsGrid: $('.projects__grid'),
+      projectsEmpty: $('.projects__empty'),
+      blogFilters: $('.blog__filters'),
+      blogGrid: $('.blog__grid'),
+      teamGrid: $('.team-grid'),
+      statsGrid: $('.stats__grid'),
+      statsCharts: $('.stats__charts'),
+      modalOverlay: $('.modal-overlay'),
+      modal: $('.modal'),
+      modalContent: $('.modal__content'),
+      modalClose: $('.modal__close'),
+      backToTop: $('.back-to-top'),
+      sections: $$('section[id]')
+    };
+  },
 
-3. **Navigation Functions**
-   - `initNavigation()` - Initialize all navigation
-   - `setupSmoothScroll()` - Setup smooth scroll for nav links
-   - `scrollToSection(sectionId)` - Scroll to section
-   - `setupScrollSpy()` - Setup Intersection Observer for sections
-   - `updateActiveNavLink(sectionId)` - Update active nav link
-   - `setupNavbarScroll()` - Add scrolled class on scroll
+  initNavigation() {
+    this.setupSmoothScroll();
+    this.setupScrollSpy();
+    this.setupNavbarScroll();
+  },
 
-4. **Mobile Menu Functions**
-   - `initMobileMenu()` - Initialize mobile menu
-   - `toggleMobileMenu()` - Toggle mobile menu state
-   - `closeMobileMenu()` - Close mobile menu
+  setupSmoothScroll() {
+    [...this.elements.navbarLinks, ...this.elements.mobileMenuLinks].forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const href = link.getAttribute('href');
+        const sectionId = href.substring(1);
+        this.scrollToSection(sectionId);
+        if (this.state.isMobileMenuOpen) {
+          this.closeMobileMenu();
+        }
+      });
+    });
+  },
 
-5. **Filter Functions**
-   - `initFilters()` - Initialize all filters
-   - `renderFilterBar()` - Render filter tags
-   - `setupFilterListeners()` - Setup filter event listeners
-   - `handleFilterClick(e)` - Handle filter tag click
-   - `handleBlogFilterClick(e)` - Handle blog filter click
-   - `updateFilterUI(container, selectedTags)` - Update filter UI
-   - `filterProjects()` - Filter projects by tags and search
-   - `filterArticles(category)` - Filter articles by category
+  scrollToSection(sectionId) {
+    const section = $(`#${sectionId}`);
+    if (section) {
+      const navbarHeight = this.elements.navbar.offsetHeight;
+      const targetPosition = section.offsetTop - navbarHeight;
+      window.scrollTo({
+        top: targetPosition,
+        behavior: 'smooth'
+      });
+      history.pushState(null, null, `#${sectionId}`);
+    }
+  },
 
-6. **Search Functions**
-   - `setupSearchListeners()` - Setup search input listeners
-   - `updateSearchClearButton()` - Show/hide clear button
-   - `clearSearch()` - Clear search input
+  setupScrollSpy() {
+    const observerOptions = {
+      root: null,
+      rootMargin: '-20% 0px -80% 0px',
+      threshold: 0
+    };
 
-7. **Render Functions**
-   - `renderProjects(projectList)` - Render project cards
-   - `renderArticles(articleList)` - Render article cards
-   - `renderTeam()` - Render team cards
-   - `renderStats()` - Render stat cards
-   - `showEmptyState()` - Show empty state message
-   - `hideEmptyState()` - Hide empty state message
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          this.updateActiveNavLink(entry.target.id);
+        }
+      });
+    }, observerOptions);
 
-8. **Modal Functions**
-   - `initModals()` - Initialize modals
-   - `setupModalListeners()` - Setup modal event listeners
-   - `setupProjectCardListeners()` - Setup project card clicks
-   - `openProjectModal(projectId)` - Open project detail modal
-   - `closeModal()` - Close modal
-   - `trapFocus(modal)` - Trap focus in modal
+    this.elements.sections.forEach(section => observer.observe(section));
+  },
 
-9. **Scroll Animations**
-   - `initScrollAnimations()` - Initialize Intersection Observer
+  updateActiveNavLink(sectionId) {
+    this.state.currentSection = sectionId;
+    
+    this.elements.navbarLinks.forEach(link => {
+      const href = link.getAttribute('href').substring(1);
+      link.classList.toggle('navbar__link--active', href === sectionId);
+    });
 
-10. **Back to Top Button**
-    - `initBackToTop()` - Initialize back to top button
+    this.elements.mobileMenuLinks.forEach(link => {
+      const href = link.getAttribute('href').substring(1);
+      link.classList.toggle('mobile-menu__link--active', href === sectionId);
+    });
+  },
 
-11. **Main Initialization**
-    - `init()` - Main initialization function
-    - DOMContentLoaded listener
+  setupNavbarScroll() {
+    const handleScroll = throttle(() => {
+      const scrolled = window.scrollY > 50;
+      this.elements.navbar.classList.toggle('navbar--scrolled', scrolled);
+    }, 100);
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+  },
+
+  initMobileMenu() {
+    this.elements.hamburger.addEventListener('click', () => {
+      this.toggleMobileMenu();
+    });
+
+    this.elements.mobileMenu.addEventListener('click', (e) => {
+      if (e.target === this.elements.mobileMenu) {
+        this.closeMobileMenu();
+      }
+    });
+  },
+
+  toggleMobileMenu() {
+    this.state.isMobileMenuOpen = !this.state.isMobileMenuOpen;
+    this.elements.hamburger.classList.toggle('navbar__hamburger--active', this.state.isMobileMenuOpen);
+    this.elements.mobileMenu.classList.toggle('mobile-menu--active', this.state.isMobileMenuOpen);
+    this.elements.hamburger.setAttribute('aria-expanded', this.state.isMobileMenuOpen);
+    this.elements.mobileMenu.setAttribute('aria-hidden', !this.state.isMobileMenuOpen);
+    
+    if (this.state.isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+  },
+
+  closeMobileMenu() {
+    this.state.isMobileMenuOpen = false;
+    this.elements.hamburger.classList.remove('navbar__hamburger--active');
+    this.elements.mobileMenu.classList.remove('mobile-menu--active');
+    this.elements.hamburger.setAttribute('aria-expanded', 'false');
+    this.elements.mobileMenu.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  },
+
+  initFilters() {
+    this.renderFilterBar();
+    this.setupFilterListeners();
+  },
+
+  renderFilterBar() {
+    if (this.elements.filterBar) {
+      this.elements.filterBar.innerHTML = renderFilterTags(filterTags, 'all');
+    }
+    if (this.elements.blogFilters) {
+      this.elements.blogFilters.innerHTML = renderFilterTags(categories, 'all');
+    }
+  },
+
+  setupFilterListeners() {
+    if (this.elements.filterBar) {
+      this.elements.filterBar.addEventListener('click', (e) => {
+        this.handleFilterClick(e);
+      });
+    }
+
+    if (this.elements.blogFilters) {
+      this.elements.blogFilters.addEventListener('click', (e) => {
+        this.handleBlogFilterClick(e);
+      });
+    }
+  },
+
+  handleFilterClick(e) {
+    const tag = e.target.closest('.filter-tag');
+    if (!tag) return;
+
+    const tagValue = tag.dataset.tag;
+
+    if (tagValue === 'all') {
+      this.state.selectedTags.clear();
+      this.state.selectedTags.add('all');
+    } else {
+      this.state.selectedTags.delete('all');
+      if (this.state.selectedTags.has(tagValue)) {
+        this.state.selectedTags.delete(tagValue);
+      } else {
+        this.state.selectedTags.add(tagValue);
+      }
+      if (this.state.selectedTags.size === 0) {
+        this.state.selectedTags.add('all');
+      }
+    }
+
+    this.updateFilterUI(this.elements.filterBar, this.state.selectedTags);
+    this.filterProjects();
+  },
+
+  handleBlogFilterClick(e) {
+    const tag = e.target.closest('.filter-tag');
+    if (!tag) return;
+
+    const category = tag.dataset.tag;
+    this.updateFilterUI(this.elements.blogFilters, new Set([category]));
+    this.filterArticles(category);
+  },
+
+  updateFilterUI(container, selectedTags) {
+    container.querySelectorAll('.filter-tag').forEach(tag => {
+      const isActive = selectedTags.has(tag.dataset.tag);
+      tag.classList.toggle('filter-tag--active', isActive);
+      tag.setAttribute('aria-pressed', isActive);
+    });
+  },
+
+  filterProjects() {
+    const filtered = projects.filter(project => {
+      const tagMatch = this.state.selectedTags.has('all') ||
+        project.tags.some(tag => this.state.selectedTags.has(tag));
+
+      const searchMatch = !this.state.searchQuery ||
+        project.name.toLowerCase().includes(this.state.searchQuery) ||
+        project.description.toLowerCase().includes(this.state.searchQuery) ||
+        project.tags.some(tag => tag.toLowerCase().includes(this.state.searchQuery));
+
+      return tagMatch && searchMatch;
+    });
+
+    this.renderProjects(filtered);
+  },
+
+  filterArticles(category) {
+    const filtered = category === 'all' 
+      ? articles 
+      : articles.filter(article => article.category === category);
+    this.renderArticles(filtered);
+  },
+
+  initSearch() {
+    if (!this.elements.searchInput) return;
+
+    const debouncedSearch = debounce(() => {
+      this.state.searchQuery = this.elements.searchInput.value.toLowerCase().trim();
+      this.updateSearchClearButton();
+      this.filterProjects();
+    }, 300);
+
+    this.elements.searchInput.addEventListener('input', debouncedSearch);
+
+    if (this.elements.searchClear) {
+      this.elements.searchClear.addEventListener('click', () => {
+        this.clearSearch();
+      });
+    }
+  },
+
+  updateSearchClearButton() {
+    if (!this.elements.searchClear) return;
+    const hasValue = this.elements.searchInput.value.length > 0;
+    this.elements.searchClear.classList.toggle('search-box__clear--visible', hasValue);
+  },
+
+  clearSearch() {
+    this.elements.searchInput.value = '';
+    this.state.searchQuery = '';
+    this.updateSearchClearButton();
+    this.filterProjects();
+  },
+
+  render() {
+    this.renderProjects(projects);
+    this.renderArticles(articles);
+    this.renderTeam();
+    this.renderStats();
+  },
+
+  renderProjects(projectList) {
+    if (!this.elements.projectsGrid) return;
+
+    if (projectList.length === 0) {
+      this.elements.projectsGrid.innerHTML = '';
+      this.elements.projectsEmpty.hidden = false;
+      this.elements.projectsEmpty.innerHTML = renderEmptyState();
+      
+      const clearBtn = this.elements.projectsEmpty.querySelector('.clear-filters');
+      if (clearBtn) {
+        clearBtn.addEventListener('click', () => {
+          this.state.selectedTags.clear();
+          this.state.selectedTags.add('all');
+          this.state.searchQuery = '';
+          this.elements.searchInput.value = '';
+          this.updateSearchClearButton();
+          this.updateFilterUI(this.elements.filterBar, this.state.selectedTags);
+          this.filterProjects();
+        });
+      }
+    } else {
+      this.elements.projectsEmpty.hidden = true;
+      this.elements.projectsGrid.innerHTML = projectList.map(renderProjectCard).join('');
+      this.setupProjectCardListeners();
+      this.initScrollAnimations();
+    }
+  },
+
+  renderArticles(articleList) {
+    if (!this.elements.blogGrid) return;
+    this.elements.blogGrid.innerHTML = articleList.map(renderArticleCard).join('');
+    this.initScrollAnimations();
+  },
+
+  renderTeam() {
+    if (!this.elements.teamGrid) return;
+    this.elements.teamGrid.innerHTML = team.map(renderTeamCard).join('');
+  },
+
+  renderStats() {
+    if (!this.elements.statsGrid) return;
+    this.elements.statsGrid.innerHTML = `
+      ${renderStatCard(stats.totalProjects, '📦', '总项目数', true)}
+      ${renderStatCard(stats.totalStars, '⭐', '总星标')}
+      ${renderStatCard(stats.totalForks, '🍴', '总 Forks')}
+      ${renderStatCard(stats.techStackCount, '💻', '技术栈')}
+    `;
+
+    if (this.elements.statsCharts) {
+      this.elements.statsCharts.innerHTML = `
+        ${renderTechDistribution(stats.techDistribution)}
+        ${renderRecentUpdates(stats.recentUpdates)}
+      `;
+    }
+  },
+
+  initModals() {
+    this.setupModalListeners();
+    this.setupProjectCardListeners();
+  },
+
+  setupModalListeners() {
+    this.elements.modalOverlay.addEventListener('click', (e) => {
+      if (e.target === this.elements.modalOverlay) {
+        this.closeModal();
+      }
+    });
+
+    this.elements.modalClose.addEventListener('click', () => {
+      this.closeModal();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && this.state.isModalOpen) {
+        this.closeModal();
+      }
+    });
+  },
+
+  setupProjectCardListeners() {
+    this.elements.projectsGrid.addEventListener('click', (e) => {
+      const card = e.target.closest('.project-card');
+      if (card) {
+        this.openProjectModal(card.dataset.id);
+      }
+    });
+  },
+
+  openProjectModal(projectId) {
+    const project = projects.find(p => p.id === projectId);
+    if (!project) return;
+
+    this.elements.modalContent.innerHTML = renderProjectDetail(project);
+    this.elements.modalOverlay.classList.add('modal-overlay--active');
+    this.elements.modalOverlay.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    this.state.isModalOpen = true;
+
+    this.trapFocus(this.elements.modal);
+    this.elements.modalClose.focus();
+  },
+
+  closeModal() {
+    this.elements.modalOverlay.classList.remove('modal-overlay--active');
+    this.elements.modalOverlay.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    this.state.isModalOpen = false;
+  },
+
+  trapFocus(modal) {
+    const focusableElements = modal.querySelectorAll(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    const firstElement = focusableElements[0];
+    const lastElement = focusableElements[focusableElements.length - 1];
+
+    const handleTabKey = (e) => {
+      if (e.key !== 'Tab') return;
+
+      if (e.shiftKey && document.activeElement === firstElement) {
+        e.preventDefault();
+        lastElement.focus();
+      } else if (!e.shiftKey && document.activeElement === lastElement) {
+        e.preventDefault();
+        firstElement.focus();
+      }
+    };
+
+    modal.addEventListener('keydown', handleTabKey);
+  },
+
+  initScrollAnimations() {
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.1
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    $$('.fade-in-up, .fade-in-scale, .stagger').forEach(el => {
+      observer.observe(el);
+    });
+  },
+
+  initBackToTop() {
+    if (!this.elements.backToTop) return;
+
+    const handleScroll = throttle(() => {
+      const showButton = window.scrollY > 500;
+      this.elements.backToTop.classList.toggle('back-to-top--visible', showButton);
+    }, 100);
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    this.elements.backToTop.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+  }
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+  App.init();
+});
+```
 
 - [ ] **Step 2: Verify app.js creation**
 
@@ -1362,14 +3072,150 @@ Expected: File has approximately 450 lines
 
 - [ ] **Step 1: Update index.html with complete HTML structure**
 
-Sections to add:
-1. Hero Section (#hero)
-2. Projects Section (#projects)
-3. About Section (#about)
-4. Blog Section (#blog)
-5. Stats Section (#stats)
+Replace the `<main id="main-content" role="main">` section with:
 
-Each section should have proper ARIA labels and semantic structure.
+```html
+  <!-- Main Content -->
+  <main id="main-content" role="main">
+    <!-- Hero Section -->
+    <section id="hero" class="hero" aria-labelledby="hero-title">
+      <div class="hero__background"></div>
+      <div class="hero__content">
+        <div class="hero__logo">🚀</div>
+        <h1 id="hero-title" class="hero__title">AFunc-OPC</h1>
+        <p class="hero__subtitle text-gradient">vibe-coding projects showcase</p>
+        <p class="hero__description">
+          探索我们的开源项目集合，每一行代码都承载着对技术的热爱与创新精神。
+          从工具库到组件框架，我们用代码构建未来。
+        </p>
+        <div class="hero__cta">
+          <a href="#projects" class="btn btn--primary btn--large">探索项目</a>
+          <a href="#about" class="btn btn--ghost btn--large">了解更多</a>
+        </div>
+      </div>
+      <div class="hero__scroll-indicator">
+        <span>向下滚动</span>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+      </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="section projects" aria-labelledby="projects-title">
+      <div class="container">
+        <h2 id="projects-title" class="section__title">Featured Projects</h2>
+        <p class="section__subtitle">探索我们的开源项目</p>
+        
+        <div class="projects__toolbar">
+          <div class="filter-bar"></div>
+          <div class="search-box">
+            <input 
+              type="text" 
+              class="search-box__input" 
+              placeholder="搜索项目..."
+              aria-label="搜索项目"
+            >
+            <button class="search-box__clear" aria-label="清除">×</button>
+          </div>
+        </div>
+        
+        <div class="projects__grid"></div>
+        <div class="projects__empty" hidden></div>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section about" aria-labelledby="about-title">
+      <div class="container">
+        <h2 id="about-title" class="section__title">关于 AFunc-OPC</h2>
+        
+        <div class="about__content">
+          <div class="about__left">
+            <div class="about__team-photo">
+              <span>🚀 AFunc-OPC Team</span>
+            </div>
+            
+            <div class="about__stats">
+              <div class="stat-card fade-in-up">
+                <div class="stat-card__number">20+</div>
+                <div class="stat-card__label">开源项目</div>
+              </div>
+              <div class="stat-card fade-in-up">
+                <div class="stat-card__number">15K+</div>
+                <div class="stat-card__label">GitHub Stars</div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="about__right">
+            <div>
+              <h3 class="about__subtitle">我们的愿景</h3>
+              <p class="about__text">
+                通过开源项目推动技术创新，为开发者社区提供高质量、易用的工具和框架。
+                我们相信代码的力量，致力于打造能够真正解决问题的产品。
+              </p>
+            </div>
+            
+            <div>
+              <h3 class="about__subtitle">技术理念</h3>
+              <ul class="about__values">
+                <li>开源精神 - 所有核心项目完全开源</li>
+                <li>技术驱动 - 追求代码质量和最佳实践</li>
+                <li>持续创新 - 不断探索新技术和解决方案</li>
+                <li>社区优先 - 重视用户反馈和社区贡献</li>
+              </ul>
+            </div>
+            
+            <div>
+              <h3 class="about__subtitle">核心团队</h3>
+              <div class="team-grid"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Blog Section -->
+    <section id="blog" class="section blog" aria-labelledby="blog-title">
+      <div class="container">
+        <h2 id="blog-title" class="section__title">Latest Articles</h2>
+        <p class="section__subtitle">技术见解与教程分享</p>
+        
+        <div class="blog__filters"></div>
+        
+        <div class="blog__grid"></div>
+        
+        <div class="text-center">
+          <button class="btn btn--secondary">查看全部文章</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section id="stats" class="section stats" aria-labelledby="stats-title">
+      <div class="container">
+        <h2 id="stats-title" class="section__title">数据看板</h2>
+        <p class="section__subtitle">项目统计与动态</p>
+        
+        <div class="stats__grid"></div>
+        
+        <div class="stats__charts"></div>
+      </div>
+    </section>
+  </main>
+```
+
+Also add the back-to-top button before `</body>`:
+
+```html
+  <!-- Back to Top Button -->
+  <button class="back-to-top" aria-label="返回顶部">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <polyline points="18 15 12 9 6 15"></polyline>
+    </svg>
+  </button>
+```
 
 - [ ] **Step 2: Verify complete HTML**
 
