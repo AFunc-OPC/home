@@ -1,0 +1,146 @@
+/* ========== Keyframe Animations ========== */
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+  40% { transform: translateX(-50%) translateY(-10px); }
+  60% { transform: translateX(-50%) translateY(-5px); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes slideInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* ========== Animation Classes ========== */
+
+.fade-in-up {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity var(--duration-slow) var(--ease-smooth),
+              transform var(--duration-slow) var(--ease-smooth);
+}
+
+.fade-in-up.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.fade-in-scale {
+  opacity: 0;
+  transform: scale(0.95);
+  transition: opacity var(--duration-slow) var(--ease-smooth),
+              transform var(--duration-slow) var(--ease-smooth);
+}
+
+.fade-in-scale.is-visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ========== Stagger Animations ========== */
+
+.stagger > * {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity var(--duration-normal) var(--ease-smooth),
+              transform var(--duration-normal) var(--ease-smooth);
+}
+
+.stagger.is-visible > * {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.stagger > *:nth-child(1) { transition-delay: 0ms; }
+.stagger > *:nth-child(2) { transition-delay: var(--delay-1); }
+.stagger > *:nth-child(3) { transition-delay: var(--delay-2); }
+.stagger > *:nth-child(4) { transition-delay: var(--delay-3); }
+.stagger > *:nth-child(5) { transition-delay: var(--delay-4); }
+.stagger > *:nth-child(6) { transition-delay: var(--delay-5); }
+
+/* ========== Hero Animations ========== */
+
+.hero__logo { animation: float 3s ease-in-out infinite; }
+.hero__title { animation: slideInUp 0.8s var(--ease-smooth) 0ms both; }
+.hero__subtitle { animation: slideInUp 0.8s var(--ease-smooth) 200ms both; }
+.hero__description { animation: slideInUp 0.8s var(--ease-smooth) 400ms both; }
+.hero__cta { animation: slideInUp 0.8s var(--ease-smooth) 600ms both; }
+.hero__scroll-indicator { animation: bounce 2s ease-in-out infinite; animation-delay: 1s; }
+
+/* ========== Loading States ========== */
+
+.is-loading {
+  position: relative;
+  pointer-events: none;
+}
+
+.is-loading::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 24px;
+  height: 24px;
+  margin: -12px 0 0 -12px;
+  border: 2px solid var(--glass-border);
+  border-top-color: var(--color-accent-blue);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* ========== Reduced Motion ========== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .hero__logo,
+  .hero__scroll-indicator {
+    animation: none;
+  }
+  
+  .hero__title,
+  .hero__subtitle,
+  .hero__description,
+  .hero__cta {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
