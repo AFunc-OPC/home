@@ -37,6 +37,7 @@ const i18n = {
         demo: '在线演示',
         docs: '文档',
         screenshot: '截图',
+        screenshots: '截图预览',
         status: {
           active: '活跃',
           archived: '已归档',
@@ -96,6 +97,7 @@ const i18n = {
         demo: 'Live Demo',
         docs: 'Documentation',
         screenshot: 'screenshot',
+        screenshots: 'Screenshots',
         status: {
           active: 'Active',
           archived: 'Archived',

@@ -118,6 +118,25 @@ function renderFilterTags(tags, activeTag) {
 function renderProjectDetail(project) {
   const longDescription = typeof project.longDescription === 'object' ? project.longDescription[i18n.currentLang] : project.longDescription;
   
+  let screenshotsHtml = '';
+  if (project.screenshots && project.screenshots.length > 0) {
+    screenshotsHtml = `
+      <div class="screenshots">
+        <h3 class="screenshots__title">${i18n.t('project.screenshots')}</h3>
+        <div class="screenshots__grid">
+          ${project.screenshots.map((shot, index) => {
+            const alt = typeof shot.alt === 'object' ? shot.alt[i18n.currentLang] : (shot.alt || '');
+            return `
+              <div class="screenshot-item" data-screenshot-index="${index}">
+                <img src="${shot.src}" alt="${alt}" loading="lazy">
+              </div>
+            `;
+          }).join('')}
+        </div>
+      </div>
+    `;
+  }
+  
   return `
     <div class="project-detail">
       <div class="project-detail__header">
@@ -135,9 +154,9 @@ function renderProjectDetail(project) {
       </div>
       <div class="project-detail__links">
         <a href="${project.links.github}" class="btn btn--primary" target="_blank" rel="noopener">GitHub</a>
-        ${project.links.demo ? `<a href="${project.links.demo}" class="btn btn--secondary" target="_blank" rel="noopener">${i18n.t('project.demo')}</a>` : ''}
-        ${project.links.docs ? `<a href="${project.links.docs}" class="btn btn--ghost" target="_blank" rel="noopener">${i18n.t('project.docs')}</a>` : ''}
+        ${project.links.gitee ? `<a href="${project.links.gitee}" class="btn btn--secondary" target="_blank" rel="noopener">Gitee</a>` : ''}
       </div>
+      ${screenshotsHtml}
       ${project.image ? `
         <div class="project-detail__image">
           <img src="${project.image}" alt="${project.name} ${i18n.t('project.screenshot')}" loading="lazy">

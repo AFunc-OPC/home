@@ -5,7 +5,9 @@ const App = {
     searchQuery: '',
     currentSection: 'hero',
     isModalOpen: false,
-    isMobileMenuOpen: false
+    isMobileMenuOpen: false,
+    lightboxImages: [],
+    lightboxIndex: 0
   },
 
   init() {
@@ -17,6 +19,7 @@ const App = {
     this.initFilters();
     this.initSearch();
     this.initModals();
+    this.initLightbox();
     this.initScrollAnimations();
     this.initBackToTop();
     this.render();
@@ -42,7 +45,13 @@ const App = {
       modalContent: $('.modal__content'),
       modalClose: $('.modal__close'),
       backToTop: $('.back-to-top'),
-      sections: $$('section[id]')
+      sections: $$('section[id]'),
+      lightbox: $('.lightbox'),
+      lightboxImage: $('.lightbox__image'),
+      lightboxCaption: $('.lightbox__caption'),
+      lightboxClose: $('.lightbox__close'),
+      lightboxPrev: $('.lightbox__prev'),
+      lightboxNext: $('.lightbox__next')
     };
   },
 
@@ -352,7 +361,8 @@ const App = {
     this.elements.modalOverlay.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
     this.state.isModalOpen = true;
-
+    
+    this.setupScreenshotListeners(project);
     this.trapFocus(this.elements.modal);
     this.elements.modalClose.focus();
   },
@@ -362,6 +372,79 @@ const App = {
     this.elements.modalOverlay.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
     this.state.isModalOpen = false;
+  },
+
+  initLightbox() {
+    if (!this.elements.lightbox) return;
+    
+    this.elements.lightboxClose.addEventListener('click', () => this.closeLightbox());
+    this.elements.lightbox.addEventListener('click', (e) => {
+      if (e.target === this.elements.lightbox) this.closeLightbox();
+    });
+    this.elements.lightboxPrev.addEventListener('click', () => this.prevLightboxImage());
+    this.elements.lightboxNext.addEventListener('click', () => this.nextLightboxImage());
+    
+    document.addEventListener('keydown', (e) => {
+      if (!this.elements.lightbox.classList.contains('lightbox--active')) return;
+      if (e.key === 'Escape') this.closeLightbox();
+      if (e.key === 'ArrowLeft') this.prevLightboxImage();
+      if (e.key === 'ArrowRight') this.nextLightboxImage();
+    });
+  },
+
+  setupScreenshotListeners(project) {
+    const screenshotItems = this.elements.modalContent.querySelectorAll('.screenshot-item');
+    if (screenshotItems.length === 0) return;
+    
+    this.state.lightboxImages = project.screenshots || [];
+    
+    screenshotItems.forEach((item, index) => {
+      item.addEventListener('click', () => this.openLightbox(index));
+    });
+  },
+
+  openLightbox(index) {
+    if (!this.elements.lightbox || this.state.lightboxImages.length === 0) return;
+    
+    this.state.lightboxIndex = index;
+    this.updateLightboxImage();
+    
+    this.elements.lightbox.classList.add('lightbox--active');
+    this.elements.lightbox.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  },
+
+  closeLightbox() {
+    if (!this.elements.lightbox) return;
+    
+    this.elements.lightbox.classList.remove('lightbox--active');
+    this.elements.lightbox.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  },
+
+  updateLightboxImage() {
+    const shot = this.state.lightboxImages[this.state.lightboxIndex];
+    if (!shot) return;
+    
+    const alt = typeof shot.alt === 'object' ? shot.alt[i18n.currentLang] : (shot.alt || '');
+    this.elements.lightboxImage.src = shot.src;
+    this.elements.lightboxImage.alt = alt;
+    this.elements.lightboxCaption.textContent = alt;
+    
+    this.elements.lightboxPrev.style.display = this.state.lightboxImages.length > 1 ? 'flex' : 'none';
+    this.elements.lightboxNext.style.display = this.state.lightboxImages.length > 1 ? 'flex' : 'none';
+  },
+
+  prevLightboxImage() {
+    if (this.state.lightboxImages.length <= 1) return;
+    this.state.lightboxIndex = (this.state.lightboxIndex - 1 + this.state.lightboxImages.length) % this.state.lightboxImages.length;
+    this.updateLightboxImage();
+  },
+
+  nextLightboxImage() {
+    if (this.state.lightboxImages.length <= 1) return;
+    this.state.lightboxIndex = (this.state.lightboxIndex + 1) % this.state.lightboxImages.length;
+    this.updateLightboxImage();
   },
 
   trapFocus(modal) {
