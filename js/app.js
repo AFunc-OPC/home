@@ -9,7 +9,9 @@ const App = {
   },
 
   init() {
+    i18n.init();
     this.cacheElements();
+    this.initLanguageToggle();
     this.initNavigation();
     this.initMobileMenu();
     this.initFilters();
@@ -27,16 +29,14 @@ const App = {
       hamburger: $('.navbar__hamburger'),
       mobileMenu: $('.mobile-menu'),
       mobileMenuLinks: $$('.mobile-menu__link'),
+      langToggle: $('.navbar__lang-toggle'),
+      langText: $('.lang-text'),
       searchInput: $('.search-box__input'),
       searchClear: $('.search-box__clear'),
       filterBar: $('.filter-bar'),
       projectsGrid: $('.projects__grid'),
       projectsEmpty: $('.projects__empty'),
-      blogFilters: $('.blog__filters'),
-      blogGrid: $('.blog__grid'),
       teamGrid: $('.team-grid'),
-      statsGrid: $('.stats__grid'),
-      statsCharts: $('.stats__charts'),
       modalOverlay: $('.modal-overlay'),
       modal: $('.modal'),
       modalContent: $('.modal__content'),
@@ -44,6 +44,24 @@ const App = {
       backToTop: $('.back-to-top'),
       sections: $$('section[id]')
     };
+  },
+
+  initLanguageToggle() {
+    if (!this.elements.langToggle) return;
+    
+    this.updateLangButton();
+    
+    this.elements.langToggle.addEventListener('click', () => {
+      i18n.toggleLang();
+      this.updateLangButton();
+      this.render();
+    });
+  },
+
+  updateLangButton() {
+    if (this.elements.langText) {
+      this.elements.langText.textContent = i18n.currentLang === 'zh' ? 'EN' : '中文';
+    }
   },
 
   initNavigation() {
@@ -164,21 +182,12 @@ const App = {
     if (this.elements.filterBar) {
       this.elements.filterBar.innerHTML = renderFilterTags(filterTags, 'all');
     }
-    if (this.elements.blogFilters) {
-      this.elements.blogFilters.innerHTML = renderFilterTags(categories, 'all');
-    }
   },
 
   setupFilterListeners() {
     if (this.elements.filterBar) {
       this.elements.filterBar.addEventListener('click', (e) => {
         this.handleFilterClick(e);
-      });
-    }
-
-    if (this.elements.blogFilters) {
-      this.elements.blogFilters.addEventListener('click', (e) => {
-        this.handleBlogFilterClick(e);
       });
     }
   },
@@ -208,15 +217,6 @@ const App = {
     this.filterProjects();
   },
 
-  handleBlogFilterClick(e) {
-    const tag = e.target.closest('.filter-tag');
-    if (!tag) return;
-
-    const category = tag.dataset.tag;
-    this.updateFilterUI(this.elements.blogFilters, new Set([category]));
-    this.filterArticles(category);
-  },
-
   updateFilterUI(container, selectedTags) {
     container.querySelectorAll('.filter-tag').forEach(tag => {
       const isActive = selectedTags.has(tag.dataset.tag);
@@ -239,13 +239,6 @@ const App = {
     });
 
     this.renderProjects(filtered);
-  },
-
-  filterArticles(category) {
-    const filtered = category === 'all' 
-      ? articles 
-      : articles.filter(article => article.category === category);
-    this.renderArticles(filtered);
   },
 
   initSearch() {
@@ -281,9 +274,7 @@ const App = {
 
   render() {
     this.renderProjects(projects);
-    this.renderArticles(articles);
     this.renderTeam();
-    this.renderStats();
   },
 
   renderProjects(projectList) {
@@ -314,32 +305,9 @@ const App = {
     }
   },
 
-  renderArticles(articleList) {
-    if (!this.elements.blogGrid) return;
-    this.elements.blogGrid.innerHTML = articleList.map(renderArticleCard).join('');
-    this.initScrollAnimations();
-  },
-
   renderTeam() {
     if (!this.elements.teamGrid) return;
     this.elements.teamGrid.innerHTML = team.map(renderTeamCard).join('');
-  },
-
-  renderStats() {
-    if (!this.elements.statsGrid) return;
-    this.elements.statsGrid.innerHTML = `
-      ${renderStatCard(stats.totalProjects, '📦', '总项目数', true)}
-      ${renderStatCard(stats.totalStars, '⭐', '总星标')}
-      ${renderStatCard(stats.totalForks, '🍴', '总 Forks')}
-      ${renderStatCard(stats.techStackCount, '💻', '技术栈')}
-    `;
-
-    if (this.elements.statsCharts) {
-      this.elements.statsCharts.innerHTML = `
-        ${renderTechDistribution(stats.techDistribution)}
-        ${renderRecentUpdates(stats.recentUpdates)}
-      `;
-    }
   },
 
   initModals() {

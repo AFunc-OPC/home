@@ -38,31 +38,18 @@ function formatDate(dateString) {
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   
   if (diffDays < 7) {
-    return `${diffDays} 天前`;
+    return `${diffDays} ${i18n.t('timeAgo.days')}`;
   } else if (diffDays < 30) {
-    return `${Math.floor(diffDays / 7)} 周前`;
+    return `${Math.floor(diffDays / 7)} ${i18n.t('timeAgo.weeks')}`;
   } else if (diffDays < 365) {
-    return `${Math.floor(diffDays / 30)} 个月前`;
+    return `${Math.floor(diffDays / 30)} ${i18n.t('timeAgo.months')}`;
   } else {
-    return `${Math.floor(diffDays / 365)} 年前`;
+    return `${Math.floor(diffDays / 365)} ${i18n.t('timeAgo.years')}`;
   }
 }
 
 function getStatusLabel(status) {
-  const labels = {
-    active: '活跃',
-    archived: '已归档',
-    developing: '开发中'
-  };
-  return labels[status] || status;
-}
-
-function getCategoryLabel(category) {
-  const labels = {
-    tutorial: '教程',
-    insight: '洞察'
-  };
-  return labels[category] || category;
+  return i18n.t(`project.status.${status}`);
 }
 
 function $(selector) {
@@ -87,6 +74,7 @@ function createElement(tag, className, innerHTML) {
 function renderProjectCard(project) {
   const statusClass = `project-card__status--${project.status}`;
   const featuredClass = project.featured ? 'project-card--featured' : '';
+  const description = typeof project.description === 'object' ? project.description[i18n.currentLang] : project.description;
   
   return `
     <article class="project-card ${featuredClass} fade-in-up" data-id="${project.id}">
@@ -94,7 +82,7 @@ function renderProjectCard(project) {
         <span class="project-card__icon">${project.icon}</span>
         <h3 class="project-card__title">${project.name}</h3>
       </div>
-      <p class="project-card__description">${project.description}</p>
+      <p class="project-card__description">${description}</p>
       <div class="project-card__tags">
         ${project.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
       </div>
@@ -107,44 +95,14 @@ function renderProjectCard(project) {
   `;
 }
 
-function renderArticleCard(article) {
-  return `
-    <article class="article-card fade-in-up">
-      <img src="${article.coverImage}" alt="${article.title}" class="article-card__image" loading="lazy">
-      <div class="article-card__content">
-        <span class="article-card__category">${getCategoryLabel(article.category)}</span>
-        <h3 class="article-card__title">${article.title}</h3>
-        <p class="article-card__excerpt">${article.excerpt}</p>
-        <div class="article-card__meta">
-          <span class="article-card__author">
-            <span>${article.authorAvatar}</span>
-            ${article.author}
-          </span>
-          <span>${formatDate(article.publishedAt)}</span>
-          <span>${article.readTime} min read</span>
-        </div>
-      </div>
-    </article>
-  `;
-}
-
 function renderTeamCard(member) {
+  const role = typeof member.role === 'object' ? member.role[i18n.currentLang] : member.role;
+  
   return `
     <div class="team-card">
       <div class="team-card__avatar">${member.avatar}</div>
       <h4 class="team-card__name">${member.name}</h4>
-      <p class="team-card__role">${member.role}</p>
-    </div>
-  `;
-}
-
-function renderStatCard(stat, icon, label, isLarge = false) {
-  const largeClass = isLarge ? 'stat-card--large' : '';
-  return `
-    <div class="stat-card ${largeClass} fade-in-up">
-      <div class="stat-card__icon">${icon}</div>
-      <div class="stat-card__number">${formatNumber(stat)}</div>
-      <div class="stat-card__label">${label}</div>
+      <p class="team-card__role">${role}</p>
     </div>
   `;
 }
@@ -158,6 +116,8 @@ function renderFilterTags(tags, activeTag) {
 }
 
 function renderProjectDetail(project) {
+  const longDescription = typeof project.longDescription === 'object' ? project.longDescription[i18n.currentLang] : project.longDescription;
+  
   return `
     <div class="project-detail">
       <div class="project-detail__header">
@@ -165,22 +125,22 @@ function renderProjectDetail(project) {
         <h2 class="project-detail__title">${project.name}</h2>
       </div>
       <div class="project-detail__stats">
-        <span>⭐ ${formatNumber(project.stars)} stars</span>
-        <span>🍴 ${formatNumber(project.forks)} forks</span>
+        <span>⭐ ${formatNumber(project.stars)} ${i18n.t('project.stars')}</span>
+        <span>🍴 ${formatNumber(project.forks)} ${i18n.t('project.forks')}</span>
         <span>● ${getStatusLabel(project.status)}</span>
       </div>
-      <p class="project-detail__description">${project.longDescription}</p>
+      <p class="project-detail__description">${longDescription}</p>
       <div class="project-detail__tags">
         ${project.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
       </div>
       <div class="project-detail__links">
         <a href="${project.links.github}" class="btn btn--primary" target="_blank" rel="noopener">GitHub</a>
-        ${project.links.demo ? `<a href="${project.links.demo}" class="btn btn--secondary" target="_blank" rel="noopener">在线演示</a>` : ''}
-        ${project.links.docs ? `<a href="${project.links.docs}" class="btn btn--ghost" target="_blank" rel="noopener">文档</a>` : ''}
+        ${project.links.demo ? `<a href="${project.links.demo}" class="btn btn--secondary" target="_blank" rel="noopener">${i18n.t('project.demo')}</a>` : ''}
+        ${project.links.docs ? `<a href="${project.links.docs}" class="btn btn--ghost" target="_blank" rel="noopener">${i18n.t('project.docs')}</a>` : ''}
       </div>
       ${project.image ? `
         <div class="project-detail__image">
-          <img src="${project.image}" alt="${project.name} 截图" loading="lazy">
+          <img src="${project.image}" alt="${project.name} ${i18n.t('project.screenshot')}" loading="lazy">
         </div>
       ` : ''}
     </div>
@@ -191,51 +151,9 @@ function renderEmptyState() {
   return `
     <div class="empty-state">
       <div class="empty-state__icon">🔍</div>
-      <h3 class="empty-state__title">没有找到相关项目</h3>
-      <p class="empty-state__text">尝试其他关键词或清除筛选条件</p>
-      <button class="btn btn--primary clear-filters">清除筛选</button>
-    </div>
-  `;
-}
-
-function renderTechDistribution(techDistribution) {
-  const maxCount = Math.max(...techDistribution.map(t => t.count));
-  return `
-    <div class="chart-card">
-      <h3 class="chart-card__title">技术栈分布</h3>
-      <div class="chart-card__body">
-        ${techDistribution.map(tech => `
-          <div style="margin-bottom: var(--space-sm);">
-            <div style="display: flex; justify-content: space-between; margin-bottom: var(--space-xs);">
-              <span style="color: var(--color-text-secondary); font-size: var(--text-sm);">${tech.name}</span>
-              <span style="color: var(--color-text-muted); font-size: var(--text-sm);">${tech.count} 项目</span>
-            </div>
-            <div style="height: 8px; background: var(--color-surface); border-radius: var(--radius-full); overflow: hidden;">
-              <div style="width: ${(tech.count / maxCount) * 100}%; height: 100%; background: var(--gradient-primary); border-radius: var(--radius-full);"></div>
-            </div>
-          </div>
-        `).join('')}
-      </div>
-    </div>
-  `;
-}
-
-function renderRecentUpdates(updates) {
-  return `
-    <div class="chart-card">
-      <h3 class="chart-card__title">最近更新</h3>
-      <div class="chart-card__body">
-        ${updates.map(update => `
-          <div style="display: flex; align-items: flex-start; gap: var(--space-md); padding: var(--space-md) 0; border-bottom: 1px solid var(--glass-border);">
-            <span style="font-size: var(--text-lg);">${update.type === 'release' ? '🚀' : '📝'}</span>
-            <div style="flex: 1;">
-              <div style="font-weight: var(--font-medium); color: var(--color-text-primary); margin-bottom: var(--space-xs);">${update.projectName}</div>
-              <div style="font-size: var(--text-sm); color: var(--color-text-secondary);">${update.message}</div>
-              <div style="font-size: var(--text-xs); color: var(--color-text-muted); margin-top: var(--space-xs);">${formatDate(update.date)}</div>
-            </div>
-          </div>
-        `).join('')}
-      </div>
+      <h3 class="empty-state__title">${i18n.t('empty.title')}</h3>
+      <p class="empty-state__text">${i18n.t('empty.text')}</p>
+      <button class="btn btn--primary clear-filters">${i18n.t('empty.clearFilters')}</button>
     </div>
   `;
 }
