@@ -230,10 +230,11 @@ const App = {
       const tagMatch = this.state.selectedTags.has('all') ||
         project.tags.some(tag => this.state.selectedTags.has(tag));
 
-      const searchMatch = !this.state.searchQuery ||
-        project.name.toLowerCase().includes(this.state.searchQuery) ||
-        project.description.toLowerCase().includes(this.state.searchQuery) ||
-        project.tags.some(tag => tag.toLowerCase().includes(this.state.searchQuery));
+      const query = this.state.searchQuery;
+      const searchMatch = !query ||
+        project.name.toLowerCase().includes(query) ||
+        project.description[i18n.currentLang]?.toLowerCase().includes(query) ||
+        project.tags.some(tag => tag.toLowerCase().includes(query));
 
       return tagMatch && searchMatch;
     });
