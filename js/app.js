@@ -23,6 +23,12 @@ const App = {
     this.initScrollAnimations();
     this.initBackToTop();
     this.render();
+    
+    if (typeof loadGitHubStats === 'function') {
+      loadGitHubStats().then(() => {
+        this.renderProjects(projects);
+      });
+    }
   },
 
   cacheElements() {
